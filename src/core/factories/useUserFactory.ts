@@ -17,30 +17,38 @@ export const useUserFactory = (factoryParams: UseUserFactoryParams) => function 
     const [user, setUser] = useState({
         value: {}
     });
-    const [loading, setLoading] = useState<any>({});
-    const [error, setError] = useState<any>({});
+    // const [loading, setLoading] = useState<any>({});
+    // const [error, setError] = useState<any>({});
+
+    // const user:any = {value:{}};
+    const loading:any = {value:{}};
+    const error:any = {};
 
     const _factoryParams = configureFactoryParams(
         factoryParams,
-        // { mainRef: user, alias: 'currentUser', loading, error }
+        { mainRef: user, alias: 'currentUser', loading, error }
     );
 
-
+    const resetErrorValue = () => {
+        error.value = null;
+    }
 
     const login = async (params: any) => {
         Logger.debug('useUser.login');
-        setError(null);
+        resetErrorValue();
+        debugger;
+
         try {
-            setLoading(true);
-            const res = await _factoryParams.login({...params});
-            setUser({...user, value: res});
-            setError({...error, value: null});
+            loading.value = true;
+            // user.value = params;
+            const rep = await _factoryParams.api.login({...params});
+            // setUser({...user, value: {...rep}})
+            error.value.login = null;
         } catch (err) {
-            setError({...error, value: {login: err}});
+            error.updateUser = err;
             Logger.error('useUser.login.error');
-            setLoading(false);
         } finally {
-            setLoading(false);
+            loading.value = false;
         }
     }
 

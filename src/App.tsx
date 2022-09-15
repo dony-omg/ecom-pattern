@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {useUser} from './composable'
 
 
@@ -8,15 +8,15 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0);
-  const {login, user} = useUser();
+  const {login, user, api} = useUser();
+
+  const handelLogin = async () => {
+    login({username: 'admin', password: 'admin'});
+}
 
   useEffect(()=>{
-    const handelLogin = async () => {
-        const rep = await login({username: 'admin', password: 'admin'})
-        console.log('handelLogin',rep);
-    }
-    handelLogin();
-  },[])
+    console.log('useEffect - user', user);
+  },[user]);
 
   return (
     <div className="App">
@@ -32,6 +32,9 @@ function App() {
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
+        </button>
+        <button onClick={() => handelLogin()}>
+          Login
         </button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
